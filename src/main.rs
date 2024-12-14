@@ -4,7 +4,7 @@ use anyhow::Error;
 use log::LevelFilter;
 use regex::Regex;
 use simple_logger::SimpleLogger;
-use wallpaper::{BingResponse, BASE_URL, BING_API, PATTERN};
+use wallpaper::{bing_response::BingResponse, BASE_URL, BING_API, PATTERN};
 
 fn main() -> anyhow::Result<(), Error> {
     SimpleLogger::new().with_level(LevelFilter::Debug).init()?;
