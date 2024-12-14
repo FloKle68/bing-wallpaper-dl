@@ -4,15 +4,20 @@ use anyhow::Error;
 use log::LevelFilter;
 use regex::Regex;
 use simple_logger::SimpleLogger;
-use wallpaper::{bing_response::BingResponse, BASE_URL, BING_API, PATTERN};
+use wallpaper::{bing_request::{*}, bing_response::BingResponse, BASE_URL, PATTERN};
 
 fn main() -> anyhow::Result<(), Error> {
     SimpleLogger::new().with_level(LevelFilter::Debug).init()?;
 
-    let response = reqwest::blocking::get(BING_API).unwrap().text().unwrap();
+    let bing_api = BingRequest::builder().build();
+
+    log::info!("Bing Request Url : {}", bing_api.get_string());
+
+    let response = reqwest::blocking::get(bing_api.get_string()).unwrap().text().unwrap();
     let bing_response: BingResponse = serde_json::from_str(&response)?;
     let var_url = &bing_response.images[0].url.as_str();
 
+    log::debug!("{var_url}");
     log::debug!("{}", &bing_response.images[0].urlbase);
 
     let title = extract_filename(&bing_response.images[0].urlbase.as_str(), PATTERN)
@@ -31,7 +36,6 @@ fn main() -> anyhow::Result<(), Error> {
 }
 
 fn extract_filename(input: &str, pattern: &str) -> Vec<String> {
-    log::debug!("{input}");
     let re = Regex::new(pattern).expect("Unable to initiate regex");
     let mut matches = Vec::new();
     for (_, [cap]) in re.captures_iter(input).map(|c| c.extract()) {
