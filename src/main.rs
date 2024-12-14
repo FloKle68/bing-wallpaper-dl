@@ -4,7 +4,7 @@ use anyhow::Error;
 use log::LevelFilter;
 use regex::Regex;
 use simple_logger::SimpleLogger;
-use wallpaper::{bing_request::{*}, bing_response::BingResponse, BASE_URL, PATTERN};
+use wallpaper::{bing_request::*, bing_response::BingResponse, BASE_URL, PATTERN};
 
 fn main() -> anyhow::Result<(), Error> {
     SimpleLogger::new().with_level(LevelFilter::Debug).init()?;
@@ -13,7 +13,10 @@ fn main() -> anyhow::Result<(), Error> {
 
     log::info!("Bing Request Url : {}", bing_api.get_string());
 
-    let response = reqwest::blocking::get(bing_api.get_string()).unwrap().text().unwrap();
+    let response = reqwest::blocking::get(bing_api.get_string())
+        .unwrap()
+        .text()
+        .unwrap();
     let bing_response: BingResponse = serde_json::from_str(&response)?;
     let var_url = &bing_response.images[0].url.as_str();
 

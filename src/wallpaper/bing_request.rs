@@ -15,7 +15,11 @@ impl BingRequest {
     pub fn get_string(&self) -> String {
         format!(
             "{}format={}&idx={}&n={}&mkt={}",
-            self.base_url.to_owned(), self.format.to_owned(), self.idx, self.number_of_days, self.market.to_owned()
+            self.base_url.to_owned(),
+            self.format.to_owned(),
+            self.idx,
+            self.number_of_days,
+            self.market.to_owned()
         )
     }
 }
@@ -85,7 +89,8 @@ mod tests {
         let bing_request = BingRequestBuilder::new().build();
         println!("---------- {} --------", bing_request.base_url.as_str());
 
-        let expected_url = String::from("https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=fr-FR");
+        let expected_url =
+            String::from("https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=fr-FR");
 
         assert_eq!(bing_request.get_string(), expected_url);
     }
@@ -93,7 +98,7 @@ mod tests {
     #[test]
     fn builder_test_base() {
         let bing_request = BingRequest {
-             base_url: String::from("https://www.bing.com/HPImageArchive.aspx?"),
+            base_url: String::from("https://www.bing.com/HPImageArchive.aspx?"),
             format: String::from("js"),
             idx: 0,
             number_of_days: 1,
@@ -103,13 +108,12 @@ mod tests {
         let bing_request_from_builder = BingRequestBuilder::new().build();
 
         assert_eq!(bing_request, bing_request_from_builder);
-
     }
 
     #[test]
     fn builder_test_modification() {
         let bing_request = BingRequest {
-             base_url: String::from("https://www.bing.com/HPImageArchive.aspx?"),
+            base_url: String::from("https://www.bing.com/HPImageArchive.aspx?"),
             format: String::from("xml"),
             idx: 1,
             number_of_days: 1,
@@ -117,13 +121,12 @@ mod tests {
         };
 
         let bing_request_from_builder = BingRequestBuilder::new()
-        .format(String::from("xml"))
-        .idx(1)
-        .number_of_days(1)
-        .market(String::from("en-US"))
-        .build();
+            .format(String::from("xml"))
+            .idx(1)
+            .number_of_days(1)
+            .market(String::from("en-US"))
+            .build();
 
         assert_eq!(bing_request, bing_request_from_builder);
-
     }
 }
